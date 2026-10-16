@@ -43,10 +43,6 @@
   }
   .controls input[type=range] { flex: 1 1 200px; accent-color: var(--accent); min-height: 44px; }
   .controls output { font-family: var(--mono); color: var(--accent); min-width: 6.5em; text-align: right; }
-  .intro { max-width: 760px; margin: 0 auto 12px; color: #cfc6b4; }
-  .intro h1 { margin: 0 0 4px; font: 700 20px/1.2 var(--condensed); font-stretch: condensed; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); }
-  .intro p { margin: 0 0 6px; }
-  .intro .hint { color: var(--accent); }
   .tip .key-list { list-style: none; padding: 0; margin: 4px 0 0; }
   .tip .key-list li { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
   .tip .key-list svg { flex: 0 0 auto; width: 30px; height: 14px; }
@@ -81,11 +77,6 @@
 </style>
 </head>
 <body>
-<section class="intro">
-  <h1>Session review: Fable 5.1 on the HFTC building plans</h1>
-  <p>On 15 October 2026, from 20:00 to 23:51, one Claude Code session running Fable 5.1 turned the 886-page construction bid set for Hayward Fire Station #6 and its Fire Training Center into five things: 117 knowledge docs, a viewer for every sheet, a PDF for a reprographics team, a new campus map, and a PS1-style 3D snow globe of the campus. Fable planned and checked the work and handed most of it to 17 cheaper subagents (9 Haiku, 3 Sonnet, 5 Opus). It paused 75 minutes for the usage window to reset rather than pay for extra usage. Then it took a second ask: put the globe on the web, and redraw the map's floor plans for instructors. Total cost at API prices: $72.57.</p>
-  <p class="hint">Press Replay to watch it. Tap KEY in any heading for what its colors and marks mean, or tap any part of the display for its details.</p>
-</section>
 <svg class="display" id="display" viewBox="0 0 400 960" role="img"
      aria-label="Session review: activity trace, crew by model, agent lanes, usage, deliverables and event log, replaying one session"></svg>
 
@@ -713,7 +704,7 @@ const TIPS = {
     const [title, items] = KEYS[element.dataset.key];
     return { title: `Key · ${title}`, body: `<ul class="key-list">${items.map(([icon, label]) => `<li>${icon}<span>${label}</span></li>`).join("")}</ul>` };
   },
-  session: () => ({ title: "Session review", body: `<p>On 15 October 2026, from 20:00 to 23:51, one Claude Code session running Fable 5.1 turned the 886-page construction bid set for Hayward Fire Station #6 and its Fire Training Center into five things: 117 knowledge docs, a viewer for every sheet, a PDF for a reprographics team, a new campus map, and a PS1-style 3D snow globe of the campus.</p><p>Fable planned and checked the work and handed most of it to 17 cheaper subagents (9 Haiku, 3 Sonnet, 5 Opus). It paused 75 minutes for the usage window to reset rather than pay for extra usage. Then it took a second ask: put the globe on the web, and redraw the map's floor plans for instructors. Total cost at API prices: $72.57.</p>` }),
+  session: () => ({ title: "Session review", body: `<p>The session turned the 886-page construction bid set for Hayward Fire Station #6 and its Fire Training Center into five things: knowledge docs, a viewer for every sheet, a PDF for a reprographics team, a new campus map, and a PS1-style 3D snow globe of the campus.</p><p>The root agent planned and checked the work and handed most of it to cheaper subagents. It paused 75 minutes for the usage window to reset rather than pay for extra usage, then took a second ask: put the globe on the web, and redraw the map's floor plans for instructors.</p>` }),
   root: () => ({ title: "Session", body: facts([["Project", "hftc building plans"], ["Root model", "Fable 5.1"], ["Started", "2026-10-15 20:00 PDT"], ["Ended", "23:51 PDT"], ["Agents", `${agents.length}: 9 Haiku, 3 Sonnet, 5 Opus`], ["User messages", "3, plus 1 question answered"], ["Total cost", "$72.57 at API prices"]]) + `<p>Data comes from the hub's audit index and the session's own transcripts.</p>` }),
   clock: () => ({ title: "Session time", body: `<p>Time since the user's first message. It reads <b>T+${clockText(currentT)}</b>, which was ${wallClock(currentT)} PDT.</p>` }),
   phase: (element) => {
