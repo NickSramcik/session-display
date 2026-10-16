@@ -36,17 +36,8 @@
   .display .hit.on, .display .hit:focus-visible { fill: rgba(80, 159, 240, 0.1); stroke: var(--info); stroke-width: 0.6; stroke-dasharray: 2 1.5; }
   @media (hover: hover) { .display .hit:hover { fill: rgba(80, 159, 240, 0.1); stroke: var(--info); stroke-width: 0.6; stroke-dasharray: 2 1.5; } }
   .display .hit.trace-hit:hover, .display .hit.trace-hit.on { fill: transparent; stroke: none; }
-  .controls { max-width: 760px; margin: 12px auto 0; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-  .controls button {
-    font: inherit; font-weight: 600; letter-spacing: 0.04em; min-height: 44px; padding: 0 14px;
-    color: var(--accent); background: none; border: 1px solid var(--border-strong);
-  }
-  .controls input[type=range] { flex: 1 1 200px; accent-color: var(--accent); min-height: 44px; }
-  .controls output { font-family: var(--mono); color: var(--accent); min-width: 6.5em; text-align: right; }
-  .tip .key-list { list-style: none; padding: 0; margin: 4px 0 0; }
-  .tip .key-list li { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
-  .tip .key-list svg { flex: 0 0 auto; width: 30px; height: 14px; }
-  .tip .key-list svg text { font: 700 9px var(--condensed); }
+  .display .control { cursor: pointer; outline: none; touch-action: none; }
+  .display .control:focus-visible .control-frame { stroke: var(--info); }
   .tip {
     position: fixed; z-index: 10; width: min(340px, calc(100vw - 20px)); max-height: 60vh; overflow: auto;
     background: #0d0803; color: var(--text); font-size: 14px; line-height: 1.4;
@@ -80,12 +71,6 @@
 <svg class="display" id="display" viewBox="0 0 400 960" role="img"
      aria-label="Session review: activity trace, crew by model, agent lanes, usage, deliverables and event log, replaying one session"></svg>
 
-<div class="controls">
-  <button id="play">Replay</button>
-  <input id="scrub" type="range" min="0" max="1000" step="1" value="1000" aria-label="Session time">
-  <output id="clock-out">T+3:50:12</output>
-  <button id="to-end">End</button>
-</div>
 <div class="tip" id="tip" role="dialog" aria-live="polite" hidden>
   <button class="tip-close" id="tip-close" aria-label="Close">×</button>
   <h3 id="tip-title"></h3>
@@ -331,23 +316,54 @@ const bigClock = add(display, "text", { x: 6, y: 93, "font-size": 27, fill: "var
 hit(4, 58, 186, 40, "clock", { "aria-label": "Session time" });
 const readouts = [["AT WORK", "at-work"], ["TOOL CALLS", "tool-calls"]].map(([label, tip], index) => {
   const x = 204 + index * 96;
-  add(display, "rect", { x, y: 64, width: 90, height: 30, fill: "none", stroke: "var(--accent)", "stroke-width": 0.8 });
-  add(display, "text", { x: x + 5, y: 73, "font-size": 6.5, fill: "var(--ok)" }, label);
-  hit(x, 64, 90, 30, tip, { "aria-label": label });
-  return add(display, "text", { x: x + 85, y: 89, "text-anchor": "end", "font-size": 13, fill: "var(--accent)" }, "");
+  add(display, "rect", { x, y: 62, width: 90, height: 28, fill: "none", stroke: "var(--accent)", "stroke-width": 0.8 });
+  add(display, "text", { x: x + 5, y: 70.5, "font-size": 6.5, fill: "var(--ok)" }, label);
+  hit(x, 62, 90, 28, tip, { "aria-label": label });
+  return add(display, "text", { x: x + 85, y: 86, "text-anchor": "end", "font-size": 13, fill: "var(--accent)" }, "");
 });
-keyChip(378, 107.5, "header", "Phases");
 const modeBoxes = PHASES.map(([name], index) => {
-  const x = 6 + index * 46.5;
-  const box = add(display, "rect", { x, y: 104, width: 44, height: 16, fill: "none", stroke: "var(--accent)", "stroke-width": 1 });
-  const label = add(display, "text", { x: x + 22, y: 115, "text-anchor": "middle", "font-size": 7.5, fill: "var(--accent)" }, name);
-  hit(x, 104, 44, 16, "phase", { "data-index": index, "aria-label": `Phase ${name}` });
+  const x = 6 + index * 48.75;
+  const box = add(display, "rect", { x, y: 104, width: 46, height: 16, fill: "none", stroke: "var(--accent)", "stroke-width": 1 });
+  const label = add(display, "text", { x: x + 23, y: 115, "text-anchor": "middle", "font-size": 7.5, fill: "var(--accent)" }, name);
+  hit(x, 104, 46, 16, "phase", { "data-index": index, "aria-label": `Phase ${name}` });
   return { box, label };
 });
 
+// The phase key sits above the top-right corner of the last phase box.
+keyChip(376, 93, "header", "Phases");
+
+// Scrubber: play/pause, a track that moves along the axis (so breaks pass
+// quickly), and END. The big clock above shows the time.
+const scrubber = { top: 125, height: 12, left: 30, right: 360 };
+const trackX = timeScale(scrubber.left, scrubber.right, 14);
+const scrubMiddle = scrubber.top + scrubber.height / 2;
+const playControl = add(display, "g", { class: "control", tabindex: 0, role: "button", "aria-label": "Replay" });
+add(playControl, "rect", { x: 4, y: scrubber.top - 3, width: 22, height: scrubber.height + 6, fill: "transparent" });
+add(playControl, "rect", { x: 6, y: scrubber.top, width: 18, height: scrubber.height, rx: 1.5, fill: "none", stroke: "var(--accent)", "stroke-width": 0.9, class: "control-frame" });
+const playGlyph = add(playControl, "path", { d: "", fill: "var(--accent)" });
+for (const [from, to] of SPANS) add(display, "rect", { x: trackX(from), y: scrubMiddle - 1, width: trackX(to) - trackX(from), height: 2, fill: "var(--off)" });
+for (const [, from] of PHASES.slice(1)) add(display, "line", { x1: trackX(from), x2: trackX(from), y1: scrubMiddle - 3.5, y2: scrubMiddle + 3.5, stroke: "var(--border-strong)", "stroke-width": 0.6 });
+const trackFill = add(display, "rect", { x: scrubber.left, y: scrubMiddle - 1, width: 0, height: 2, fill: "var(--accent)" });
+const trackThumb = add(display, "rect", { x: 0, y: scrubber.top, width: 3.5, height: scrubber.height, fill: "var(--accent)" });
+const trackControl = add(display, "rect", { x: scrubber.left - 4, y: scrubber.top - 4, width: scrubber.right - scrubber.left + 8, height: scrubber.height + 8, fill: "transparent", class: "control", tabindex: 0, role: "slider", "aria-label": "Session time", "aria-valuemin": 0, "aria-valuemax": Math.round(END) });
+const endControl = add(display, "g", { class: "control", tabindex: 0, role: "button", "aria-label": "Jump to the end" });
+add(endControl, "rect", { x: 364, y: scrubber.top - 3, width: 32, height: scrubber.height + 6, fill: "transparent" });
+add(endControl, "rect", { x: 366, y: scrubber.top, width: 28, height: scrubber.height, rx: 1.5, fill: "none", stroke: "var(--accent)", "stroke-width": 0.9, class: "control-frame" });
+add(endControl, "text", { x: 380, y: scrubber.top + 8.8, "text-anchor": "middle", "font-size": 7.5, fill: "var(--accent)" }, "END");
+function updateScrubber(t) {
+  const x = trackX(t);
+  trackFill.setAttribute("width", Math.max(0, x - scrubber.left));
+  trackThumb.setAttribute("x", x - 1.75);
+  trackControl.setAttribute("aria-valuenow", Math.round(t));
+  trackControl.setAttribute("aria-valuetext", `T+${clockText(t)}`);
+  const x0 = 12.5, y0 = scrubber.top + 3;
+  playGlyph.setAttribute("d", playing ? `M${x0} ${y0}h2v6h-2zM${x0 + 3.5} ${y0}h2v6h-2z` : `M${x0} ${y0}l6 3l-6 3z`);
+  playControl.setAttribute("aria-label", playing ? "Pause" : currentT >= END ? "Replay" : "Play");
+}
+
 // Trace panel
-sectionTitle(140, "ACTIVITY TRACE", "TOKENS OUT / MIN · ALL AGENTS", "trace-title", "trace");
-const plot = { left: 30, right: 394, top: 150, bottom: 268 };
+sectionTitle(156, "ACTIVITY TRACE", "TOKENS OUT / MIN · ALL AGENTS", "trace-title", "trace");
+const plot = { left: 30, right: 394, top: 166, bottom: 284 };
 const xFor = timeScale(plot.left, plot.right, 14);
 const yFor = (tokens) => plot.bottom - (tokens / 60000) * (plot.bottom - plot.top);
 const TICKS = [0, 15, 30, 120, 135, 165, 180, 195, 210, 225];
@@ -436,7 +452,7 @@ const probe = add(display, "line", { x1: 0, x2: 0, y1: plot.top, y2: plot.bottom
 const playhead = add(display, "line", { x1: 0, x2: 0, y1: plot.top, y2: plot.bottom, stroke: "var(--info)", "stroke-width": 0.9, "stroke-dasharray": "2 2" });
 
 // Crew panel (MAGI)
-const crewTop = 298;
+const crewTop = 314;
 const crewY = (y) => crewTop + (y - 268);
 sectionTitle(crewTop, "CREW", "ONE BLOCK PER MODEL · ONE CELL PER AGENT", "crew-title", "crew");
 const tiers = { HAIKU: [], SONNET: [], OPUS: [] };
@@ -689,8 +705,7 @@ function render(t) {
     line.setAttribute("fill", event ? EVENT_FILL[event[1]] : "var(--ok)");
   });
 
-  document.getElementById("clock-out").textContent = `T+${clockText(t)}`;
-  document.getElementById("scrub").value = String(Math.round(playX(t)));
+  updateScrubber(t);
   if (openTarget) showTip(openTarget, lastPointer);
 }
 
@@ -822,39 +837,50 @@ document.addEventListener("keydown", (event) => { if (event.key === "Escape") hi
 document.addEventListener("click", (event) => { if (!display.contains(event.target) && !tip.contains(event.target)) hideTip(); });
 
 // ---- Playback ------------------------------------------------------------------
-// The slider and playback move along the axis, so breaks pass in a few seconds.
-const playX = timeScale(0, 1000, 60);
-const POSITIONS_PER_SECOND = 20; // the whole session in about 50 seconds
+// Playback moves along the track at a steady speed, so breaks pass in a few seconds.
+const TRACK_PER_SECOND = (scrubber.right - scrubber.left) / 50; // the whole session in about 50 seconds
 let playing = false, playStart = 0, playFrom = 0;
-const playButton = document.getElementById("play");
 function frameLoop(now) {
   if (!playing) return;
-  const position = Math.min(1000, playFrom + ((now - playStart) / 1000) * POSITIONS_PER_SECOND);
-  render(Math.min(END, playX.invert(position)));
-  if (position >= 1000 || playX.invert(position) >= END) { playing = false; playButton.textContent = "Replay"; render(END); return; }
+  const t = Math.min(END, trackX.invert(playFrom + ((now - playStart) / 1000) * TRACK_PER_SECOND));
+  if (t >= END) playing = false;
+  render(t);
+  if (playing) requestAnimationFrame(frameLoop);
+}
+function play() {
+  playing = true; playFrom = trackX(currentT >= END ? 0 : currentT); playStart = performance.now();
   requestAnimationFrame(frameLoop);
 }
-function play(from = 0) {
-  playing = true; playFrom = from; playStart = performance.now();
-  playButton.textContent = "Pause";
-  requestAnimationFrame(frameLoop);
-}
-playButton.onclick = () => {
-  if (playing) { playing = false; playButton.textContent = "Play"; return; }
-  const position = Number(document.getElementById("scrub").value);
-  play(currentT >= END ? 0 : position);
-};
-document.getElementById("scrub").oninput = (event) => {
-  playing = false; playButton.textContent = "Play";
-  render(Math.min(END, playX.invert(Number(event.target.value))));
-};
-document.getElementById("to-end").onclick = () => { playing = false; playButton.textContent = "Replay"; render(END); };
+function pause() { playing = false; render(currentT); }
+const togglePlay = () => (playing ? pause() : play());
+const scrubTo = (t) => { playing = false; render(Math.min(END, Math.max(0, t))); };
+const timeAtPointer = (event) => trackX.invert(new DOMPoint(event.clientX, event.clientY).matrixTransform(display.getScreenCTM().inverse()).x);
+playControl.addEventListener("click", (event) => { event.stopPropagation(); togglePlay(); });
+endControl.addEventListener("click", (event) => { event.stopPropagation(); scrubTo(END); });
+let dragging = false;
+trackControl.addEventListener("pointerdown", (event) => { dragging = true; trackControl.setPointerCapture(event.pointerId); scrubTo(timeAtPointer(event)); });
+trackControl.addEventListener("pointermove", (event) => { if (dragging) scrubTo(timeAtPointer(event)); });
+trackControl.addEventListener("pointerup", () => { dragging = false; });
+trackControl.addEventListener("click", (event) => event.stopPropagation());
+for (const control of [playControl, endControl]) control.addEventListener("keydown", (event) => {
+  if (!["Enter", " "].includes(event.key)) return;
+  event.preventDefault();
+  control === playControl ? togglePlay() : scrubTo(END);
+});
+trackControl.addEventListener("keydown", (event) => {
+  const steps = { ArrowLeft: -1, ArrowDown: -1, ArrowRight: 1, ArrowUp: 1, PageDown: -10, PageUp: 10 };
+  if (event.key in steps) scrubTo(currentT + steps[event.key]);
+  else if (event.key === "Home") scrubTo(0);
+  else if (event.key === "End") scrubTo(END);
+  else return;
+  event.preventDefault();
+});
 addEventListener("resize", layoutLanes);
 
 layoutLanes();
 const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
 if (reducedMotion || location.hash === "#end") render(END);
-else { render(0); play(0); }
+else { render(0); play(); }
 </script>
 </body>
 </html>
