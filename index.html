@@ -47,14 +47,10 @@
   .intro h1 { margin: 0 0 4px; font: 700 20px/1.2 var(--condensed); font-stretch: condensed; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); }
   .intro p { margin: 0 0 6px; }
   .intro .hint { color: var(--accent); }
-  .key { max-width: 760px; margin: 18px auto 0; color: #cfc6b4; font-size: 14px; }
-  .key h2 { font: 700 15px/1.2 var(--condensed); font-stretch: condensed; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin: 0 0 8px; border-bottom: 1px solid var(--border); padding-bottom: 3px; }
-  .key-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px 22px; }
-  .key h3 { font: 700 13px/1.2 var(--condensed); font-stretch: condensed; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ok); margin: 0 0 4px; }
-  .key ul { list-style: none; margin: 0; padding: 0; }
-  .key li { display: flex; align-items: center; gap: 8px; margin-bottom: 3px; }
-  .key svg { flex: 0 0 auto; width: 30px; height: 14px; }
-  .key svg text { font: 700 9px var(--condensed); }
+  .tip .key-list { list-style: none; padding: 0; margin: 4px 0 0; }
+  .tip .key-list li { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+  .tip .key-list svg { flex: 0 0 auto; width: 30px; height: 14px; }
+  .tip .key-list svg text { font: 700 9px var(--condensed); }
   .tip {
     position: fixed; z-index: 10; width: min(340px, calc(100vw - 20px)); max-height: 60vh; overflow: auto;
     background: #0d0803; color: var(--text); font-size: 14px; line-height: 1.4;
@@ -88,7 +84,7 @@
 <section class="intro">
   <h1>Session review: Fable 5.1 on the HFTC building plans</h1>
   <p>On 15 October 2026, from 20:00 to 23:51, one Claude Code session running Fable 5.1 turned the 886-page construction bid set for Hayward Fire Station #6 and its Fire Training Center into five things: 117 knowledge docs, a viewer for every sheet, a PDF for a reprographics team, a new campus map, and a PS1-style 3D snow globe of the campus. Fable planned and checked the work and handed most of it to 17 cheaper subagents (9 Haiku, 3 Sonnet, 5 Opus). It paused 75 minutes for the usage window to reset rather than pay for extra usage. Then it took a second ask: put the globe on the web, and redraw the map's floor plans for instructors. Total cost at API prices: $72.57.</p>
-  <p class="hint">Press Replay to watch it, or tap any part of the display for what it means.</p>
+  <p class="hint">Press Replay to watch it. Tap KEY in any heading for what its colors and marks mean, or tap any part of the display for its details.</p>
 </section>
 <svg class="display" id="display" viewBox="0 0 400 960" role="img"
      aria-label="Session review: activity trace, crew by model, agent lanes, usage, deliverables and event log, replaying one session"></svg>
@@ -99,79 +95,6 @@
   <output id="clock-out">T+3:50:12</output>
   <button id="to-end">End</button>
 </div>
-<section class="key" aria-labelledby="key-title">
-  <h2 id="key-title">Key</h2>
-  <div class="key-grid">
-    <div>
-      <h3>Header</h3>
-      <ul>
-        <li><svg viewBox="0 0 30 14" aria-hidden="true"><rect x="1" y="2" width="27" height="10" fill="var(--accent)" stroke="var(--accent)"/></svg><span>Current phase</span></li>
-        <li><svg viewBox="0 0 30 14" aria-hidden="true"><rect x="1" y="2" width="27" height="10" fill="var(--info)" stroke="var(--accent)"/></svg><span>Current phase is a wait (usage hold or idle)</span></li>
-        <li><svg viewBox="0 0 30 14" aria-hidden="true"><rect x="1" y="2" width="27" height="10" fill="none" stroke="var(--accent)"/></svg><span>Other phases</span></li>
-      </ul>
-    </div>
-    <div>
-      <h3>Activity trace</h3>
-      <ul>
-        <li><svg viewBox="0 0 30 14" aria-hidden="true"><path d="M0 12H6V4H14V8H22V2H30" fill="none" stroke="var(--accent)" stroke-width="1.6"/></svg><span>Output tokens per minute, all agents together</span></li>
-        <li><svg viewBox="0 0 30 14" aria-hidden="true"><path d="M0 12H6C3 12 4 3 8 3S11 12 8 12H14C11 12 12 3 16 3S19 12 16 12H30" fill="none" stroke="var(--accent)" stroke-width="1.6"/><rect x="5" y="12" width="13" height="2" fill="var(--buggy)"/></svg><span>Coil: agents sent back for another pass, one loop each, marked in yellow below</span></li>
-        <li><svg viewBox="0 0 30 14" aria-hidden="true"><path d="M10 13L14 1M16 13L20 1" stroke="var(--accent)" stroke-width="1.4"/></svg><span>Axis break: idle time skipped</span></li>
-        <li><svg viewBox="0 0 30 14" aria-hidden="true"><line x1="15" x2="15" y1="0" y2="14" stroke="var(--info)" stroke-width="1.4" stroke-dasharray="2 2"/></svg><span>Now, during a replay</span></li>
-      </ul>
-    </div>
-    <div>
-      <h3>Crew</h3>
-      <ul>
-        <li><svg viewBox="0 0 30 14" aria-hidden="true"><rect x="1" y="2" width="27" height="10" fill="var(--off)"/></svg><span>Not launched yet</span></li>
-        <li><svg viewBox="0 0 30 14" aria-hidden="true"><rect x="1" y="2" width="27" height="10" fill="var(--info)"/></svg><span>Working</span></li>
-        <li><svg viewBox="0 0 30 14" aria-hidden="true"><defs><pattern id="key-stripes" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="5" height="5" fill="#000"/><rect width="3" height="5" fill="var(--buggy)"/></pattern></defs><rect x="1" y="2" width="27" height="10" fill="url(#key-stripes)"/></svg><span>Working again after being sent back</span></li>
-        <li><svg viewBox="0 0 30 14" aria-hidden="true"><rect x="1" y="2" width="27" height="10" fill="var(--ok)"/></svg><span>Returned</span></li>
-        <li><svg viewBox="0 0 30 14" aria-hidden="true"><rect x="1" y="2" width="27" height="10" fill="none" stroke="var(--info)" stroke-width="1.4"/></svg><span>Stamp: some agents still out</span></li>
-        <li><svg viewBox="0 0 30 14" aria-hidden="true"><rect x="1" y="2" width="27" height="10" fill="none" stroke="var(--ok)" stroke-width="1.4"/></svg><span>Stamp: every agent back</span></li>
-      </ul>
-    </div>
-    <div>
-      <h3>Agent lanes</h3>
-      <ul>
-        <li><svg viewBox="0 0 30 14" aria-hidden="true"><polygon points="3,2 22,2 19,12 0,12" fill="var(--info)"/></svg><span>3 minutes of work, first pass</span></li>
-        <li><svg viewBox="0 0 30 14" aria-hidden="true"><polygon points="3,2 22,2 19,12 0,12" fill="var(--buggy)"/></svg><span>3 minutes of work after being sent back</span></li>
-        <li><svg viewBox="0 0 30 14" aria-hidden="true"><polygon points="3,2 22,2 19,12 0,12" fill="var(--ok)"/></svg><span>Final return</span></li>
-        <li><svg viewBox="0 0 30 14" aria-hidden="true"><polygon points="3,1 22,1 19,9 0,9" fill="var(--info)"/><rect x="10" y="10" width="2" height="4" fill="var(--failing)"/></svg><span>A tool call that failed</span></li>
-        <li><svg viewBox="0 0 30 14" aria-hidden="true"><text x="15" y="11" text-anchor="middle" fill="var(--failing)">3</text></svg><span>ERR: failed tool calls so far</span></li>
-        <li><svg viewBox="0 0 30 14" aria-hidden="true"><line x1="15" x2="15" y1="0" y2="14" stroke="var(--accent)" stroke-width="2"/></svg><span>BORDER-LINE: the page render finished</span></li>
-      </ul>
-    </div>
-    <div>
-      <h3>Usage</h3>
-      <ul>
-        <li><svg viewBox="0 0 30 14" aria-hidden="true"><rect x="1" y="2" width="27" height="10" fill="var(--ok)"/></svg><span>Under 80% of the 5-hour window</span></li>
-        <li><svg viewBox="0 0 30 14" aria-hidden="true"><rect x="1" y="2" width="27" height="10" fill="var(--buggy)"/></svg><span>80–95%: caution</span></li>
-        <li><svg viewBox="0 0 30 14" aria-hidden="true"><rect x="1" y="2" width="27" height="10" fill="var(--failing)"/></svg><span>Over 95%: danger</span></li>
-        <li><svg viewBox="0 0 30 14" aria-hidden="true"><rect x="1" y="2" width="27" height="10" fill="var(--off)"/></svg><span>Unused</span></li>
-      </ul>
-    </div>
-    <div>
-      <h3>Deliverables</h3>
-      <ul>
-        <li><svg viewBox="0 0 30 14" aria-hidden="true"><rect x="1" y="2" width="27" height="10" fill="var(--ok)"/></svg><span>Step reached: build, verify, commit, push</span></li>
-        <li><svg viewBox="0 0 30 14" aria-hidden="true"><rect x="1" y="2" width="27" height="10" fill="var(--off)"/></svg><span>Step not reached yet</span></li>
-        <li><svg viewBox="0 0 30 14" aria-hidden="true"><rect x="1" y="2" width="27" height="10" fill="none" stroke="var(--muted)" stroke-dasharray="2 2"/></svg><span>Step doesn't apply</span></li>
-        <li><svg viewBox="0 0 30 14" aria-hidden="true"><rect x="1" y="2" width="27" height="10" fill="none" stroke="var(--info)" stroke-width="1.4"/></svg><span>Waiting for the usage reset</span></li>
-        <li><svg viewBox="0 0 30 14" aria-hidden="true"><text x="15" y="11" text-anchor="middle" fill="var(--planned)">Aa</text></svg><span>From the user's second ask</span></li>
-      </ul>
-    </div>
-    <div>
-      <h3>Event log</h3>
-      <ul>
-        <li><svg viewBox="0 0 30 14" aria-hidden="true"><text x="15" y="11" text-anchor="middle" fill="var(--ok)">Aa</text></svg><span>Progress</span></li>
-        <li><svg viewBox="0 0 30 14" aria-hidden="true"><text x="15" y="11" text-anchor="middle" fill="var(--buggy)">Aa</text></svg><span>A problem, worked around</span></li>
-        <li><svg viewBox="0 0 30 14" aria-hidden="true"><text x="15" y="11" text-anchor="middle" fill="var(--failing)">Aa</text></svg><span>An error</span></li>
-        <li><svg viewBox="0 0 30 14" aria-hidden="true"><text x="15" y="11" text-anchor="middle" fill="var(--info)">Aa</text></svg><span>Waiting</span></li>
-        <li><svg viewBox="0 0 30 14" aria-hidden="true"><text x="15" y="11" text-anchor="middle" fill="var(--planned)">Aa</text></svg><span>The user</span></li>
-      </ul>
-    </div>
-  </div>
-</section>
 <div class="tip" id="tip" role="dialog" aria-live="polite" hidden>
   <button class="tip-close" id="tip-close" aria-label="Close">×</button>
   <h3 id="tip-title"></h3>
@@ -254,11 +177,19 @@ const hits = document.createElementNS(SVG_NS, "g");
 function hit(x, y, width, height, tip, extra = {}) {
   return add(hits, "rect", { x, y, width, height, class: "hit", tabindex: 0, role: "button", "data-tip": tip, ...extra });
 }
-function sectionTitle(y, title, note, tip) {
-  add(display, "text", { x: 6, y, "font-size": 10, fill: "var(--accent)" }, title);
+function sectionTitle(y, title, note, tip, key) {
+  const titleText = add(display, "text", { x: 6, y, "font-size": 10, fill: "var(--accent)" }, title);
   if (note) add(display, "text", { x: 394, y, "text-anchor": "end", "font-size": 7, fill: "var(--muted)" }, note);
   add(display, "line", { x1: 6, x2: 394, y1: y + 3, y2: y + 3, stroke: "var(--border)", "stroke-width": 0.8 });
   hit(4, y - 10, 392, 14, tip, { "aria-label": `${title}: what it shows` });
+  keyChip(6 + titleText.getComputedTextLength() + 6, y - 8, key, title);
+}
+
+/** A small KEY chip; tapping it shows the legend for one panel. */
+function keyChip(x, y, key, title) {
+  add(display, "rect", { x, y, width: 17, height: 9, rx: 1.5, fill: "none", stroke: "var(--ok)", "stroke-width": 0.8 });
+  add(display, "text", { x: x + 8.5, y: y + 6.8, "text-anchor": "middle", "font-size": 6, fill: "var(--ok)" }, "KEY");
+  hit(x - 2, y - 2, 21, 13, "key", { "data-key": key, "aria-label": `Key for ${title}` });
 }
 
 // ---- Story of the session (from the transcript) ---------------------------
@@ -363,6 +294,31 @@ const sumTo = (perMinute, t) => {
 };
 const phaseAt = (t) => Math.max(0, PHASES.findLastIndex(([, from]) => t >= from));
 
+// ---- Keys: what each panel's colors and marks mean ---------------------------
+const swatch = (inner) => `<svg viewBox="0 0 30 14" aria-hidden="true">${inner}</svg>`;
+const SWATCH = {
+  block: (color) => swatch(`<polygon points="3,2 22,2 19,12 0,12" fill="${color}"/>`),
+  box: (color) => swatch(`<rect x="1" y="2" width="27" height="10" fill="${color}"/>`),
+  outline: (color, dashed) => swatch(`<rect x="1" y="2" width="27" height="10" fill="none" stroke="${color}" stroke-width="1.4"${dashed ? ' stroke-dasharray="2 2"' : ""}/>`),
+  phase: (color) => swatch(`<rect x="1" y="2" width="27" height="10" fill="${color}" stroke="var(--accent)"/>`),
+  stripes: () => swatch(`<defs><pattern id="key-stripes" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="5" height="5" fill="#000"/><rect width="3" height="5" fill="var(--buggy)"/></pattern></defs><rect x="1" y="2" width="27" height="10" fill="url(#key-stripes)"/>`),
+  step: () => swatch(`<path d="M0 12H6V4H14V8H22V2H30" fill="none" stroke="var(--accent)" stroke-width="1.6"/>`),
+  coil: () => swatch(`<path d="M0 12H6C3 12 4 3 8 3S11 12 8 12H14C11 12 12 3 16 3S19 12 16 12H30" fill="none" stroke="var(--accent)" stroke-width="1.6"/><rect x="5" y="12" width="13" height="2" fill="var(--buggy)"/>`),
+  axisBreak: () => swatch(`<path d="M10 13L14 1M16 13L20 1" stroke="var(--accent)" stroke-width="1.4"/>`),
+  line: (color, dashed) => swatch(`<line x1="15" x2="15" y1="0" y2="14" stroke="${color}" stroke-width="${dashed ? 1.4 : 2}"${dashed ? ' stroke-dasharray="2 2"' : ""}/>`),
+  errorTick: () => swatch(`<polygon points="3,1 22,1 19,9 0,9" fill="var(--info)"/><rect x="10" y="10" width="2" height="4" fill="var(--failing)"/>`),
+  glyph: (color, text) => swatch(`<text x="15" y="11" text-anchor="middle" fill="${color}">${text}</text>`),
+};
+const KEYS = {
+  header: ["Phases", [[SWATCH.phase("var(--accent)"), "Current phase"], [SWATCH.phase("var(--info)"), "Current phase is a wait (usage hold or idle)"], [SWATCH.phase("none"), "Other phases"]]],
+  trace: ["Activity trace", [[SWATCH.step(), "Output tokens per minute, all agents together"], [SWATCH.coil(), "Coil: agents sent back for another pass, one loop each, marked in yellow below"], [SWATCH.axisBreak(), "Axis break: idle time skipped"], [SWATCH.line("var(--info)", true), "Now, during a replay"]]],
+  crew: ["Crew", [[SWATCH.box("var(--off)"), "Not launched yet"], [SWATCH.box("var(--info)"), "Working"], [SWATCH.stripes(), "Working again after being sent back"], [SWATCH.box("var(--ok)"), "Returned"], [SWATCH.outline("var(--info)"), "Stamp: some agents still out"], [SWATCH.outline("var(--ok)"), "Stamp: every agent back"]]],
+  lanes: ["Agent lanes", [[SWATCH.block("var(--info)"), "3 minutes of work, first pass"], [SWATCH.block("var(--buggy)"), "3 minutes of work after being sent back"], [SWATCH.block("var(--ok)"), "Final return"], [SWATCH.errorTick(), "A tool call that failed"], [SWATCH.glyph("var(--failing)", "3"), "ERR: failed tool calls so far"], [SWATCH.line("var(--accent)"), "BORDER-LINE: the page render finished"], [SWATCH.line("var(--info)", true), "Now, during a replay"]]],
+  usage: ["Usage", [[SWATCH.box("var(--ok)"), "Under 80% of the 5-hour window"], [SWATCH.box("var(--buggy)"), "80–95%: caution"], [SWATCH.box("var(--failing)"), "Over 95%: danger"], [SWATCH.box("var(--off)"), "Unused"]]],
+  deliverables: ["Deliverables", [[SWATCH.box("var(--ok)"), "Step reached: build, verify, commit, push"], [SWATCH.box("var(--off)"), "Step not reached yet"], [SWATCH.outline("var(--muted)", true), "Step doesn't apply"], [SWATCH.outline("var(--info)"), "Waiting for the usage reset"], [SWATCH.glyph("var(--planned)", "Aa"), "From the user's second ask"]]],
+  log: ["Event log", [[SWATCH.glyph("var(--ok)", "Aa"), "Progress"], [SWATCH.glyph("var(--buggy)", "Aa"), "A problem, worked around"], [SWATCH.glyph("var(--failing)", "Aa"), "An error"], [SWATCH.glyph("var(--info)", "Aa"), "Waiting"], [SWATCH.glyph("var(--planned)", "Aa"), "The user"]]],
+};
+
 // ---- Static frame -------------------------------------------------------------
 const defs = add(display, "defs", {});
 const pattern = add(defs, "pattern", { id: "rework", width: 5, height: 5, patternUnits: "userSpaceOnUse", patternTransform: "rotate(45)" });
@@ -389,16 +345,17 @@ const readouts = [["AT WORK", "at-work"], ["TOOL CALLS", "tool-calls"]].map(([la
   hit(x, 64, 90, 30, tip, { "aria-label": label });
   return add(display, "text", { x: x + 85, y: 89, "text-anchor": "end", "font-size": 13, fill: "var(--accent)" }, "");
 });
+keyChip(378, 107.5, "header", "Phases");
 const modeBoxes = PHASES.map(([name], index) => {
-  const x = 6 + index * 48.75;
-  const box = add(display, "rect", { x, y: 104, width: 46, height: 16, fill: "none", stroke: "var(--accent)", "stroke-width": 1 });
-  const label = add(display, "text", { x: x + 23, y: 115, "text-anchor": "middle", "font-size": 7.5, fill: "var(--accent)" }, name);
-  hit(x, 104, 46, 16, "phase", { "data-index": index, "aria-label": `Phase ${name}` });
+  const x = 6 + index * 46.5;
+  const box = add(display, "rect", { x, y: 104, width: 44, height: 16, fill: "none", stroke: "var(--accent)", "stroke-width": 1 });
+  const label = add(display, "text", { x: x + 22, y: 115, "text-anchor": "middle", "font-size": 7.5, fill: "var(--accent)" }, name);
+  hit(x, 104, 44, 16, "phase", { "data-index": index, "aria-label": `Phase ${name}` });
   return { box, label };
 });
 
 // Trace panel
-sectionTitle(140, "ACTIVITY TRACE", "TOKENS OUT / MIN · ALL AGENTS", "trace-title");
+sectionTitle(140, "ACTIVITY TRACE", "TOKENS OUT / MIN · ALL AGENTS", "trace-title", "trace");
 const plot = { left: 30, right: 394, top: 150, bottom: 268 };
 const xFor = timeScale(plot.left, plot.right, 14);
 const yFor = (tokens) => plot.bottom - (tokens / 60000) * (plot.bottom - plot.top);
@@ -490,7 +447,7 @@ const playhead = add(display, "line", { x1: 0, x2: 0, y1: plot.top, y2: plot.bot
 // Crew panel (MAGI)
 const crewTop = 298;
 const crewY = (y) => crewTop + (y - 268);
-sectionTitle(crewTop, "CREW", "ONE BLOCK PER MODEL · ONE CELL PER AGENT", "crew-title");
+sectionTitle(crewTop, "CREW", "ONE BLOCK PER MODEL · ONE CELL PER AGENT", "crew-title", "crew");
 const tiers = { HAIKU: [], SONNET: [], OPUS: [] };
 for (const agent of agents) tiers[agent.model].push(agent);
 const crewBlocks = [
@@ -536,7 +493,7 @@ hit(4, crewY(328), 96, 11, "cost", { "aria-label": "Subagent cost" });
 // gap between two blocks is the same width.
 const BIN = 3;
 const lanesTop = crewY(466) + 22;
-sectionTitle(lanesTop, "AGENT LANES", "ONE BLOCK = 3 MIN AT WORK", "lanes-title");
+sectionTitle(lanesTop, "AGENT LANES", "ONE BLOCK = 3 MIN AT WORK", "lanes-title", "lanes");
 const lanes = { left: 52, right: 376, top: lanesTop + 10, rowHeight: 10 };
 const laneX = timeScale(lanes.left, lanes.right, 12);
 const pitch = BIN * laneX.unit;
@@ -595,7 +552,7 @@ const laneHead = add(display, "line", { x1: 0, x2: 0, y1: lanes.top - 2, y2: lan
 
 // Usage (segment bar)
 const usageTop = lanesBottom + 46;
-sectionTitle(usageTop, "USAGE · 5-HOUR WINDOW", "AS LAST READ BY THE SESSION", "usage");
+sectionTitle(usageTop, "USAGE · 5-HOUR WINDOW", "AS LAST READ BY THE SESSION", "usage", "usage");
 const usageCaption = add(display, "text", { x: 6, y: usageTop + 14, "font-size": 7, fill: "var(--muted)" }, "");
 add(display, "text", { x: 6 + 0.80 * 300 + 3, y: usageTop + 14, "font-size": 7, fill: "var(--buggy)" }, "CAUTION");
 add(display, "text", { x: 6 + 0.95 * 300 + 3, y: usageTop + 14, "font-size": 7, fill: "var(--failing)" }, "DANGER");
@@ -607,7 +564,7 @@ hit(4, usageTop + 5, 392, 30, "usage", { "aria-label": "Usage readings" });
 
 // Deliverables (phase rows)
 const deliverablesTop = usageTop + 50;
-sectionTitle(deliverablesTop, "DELIVERABLES", "THE USER'S ASKS, IN PRIORITY ORDER", "deliverables");
+sectionTitle(deliverablesTop, "DELIVERABLES", "THE USER'S ASKS, IN PRIORITY ORDER", "deliverables", "deliverables");
 const deliverableRows = [];
 let rowY = deliverablesTop + 8;
 let ask2Label = null;
@@ -644,6 +601,7 @@ display.setAttribute("viewBox", `0 0 400 ${height}`);
 add(display, "rect", { x: 4, y: logTop - 7, width: 392, height: height - logTop + 5, fill: "none", stroke: "var(--border)", "stroke-width": 0.8 });
 const logLines = [...Array(4)].map((_, index) => add(display, "text", { x: 9, y: logTop + 5 + index * 10, "font-size": 7.6, class: "mono", fill: "var(--ok)" }, ""));
 hit(4, logTop - 7, 392, height - logTop + 5, "log", { "aria-label": "Event log: show all events" });
+keyChip(376, logTop - 4, "log", "Event log");
 display.append(hits);
 
 // ---- Render at time t ----------------------------------------------------------
@@ -751,6 +709,10 @@ const facts = (rows) => `<dl>${rows.map(([name, value]) => `<dt>${name}</dt><dd>
 const at = (minute) => `T+${clockText(minute)} (${wallClock(minute)})`;
 const errorList = (agent) => list(agent.errors.map(([minute, tool, message]) => `<span class="mono">${at(minute)} · ${tool}</span><br>${escapeHtml(message)}`));
 const TIPS = {
+  key: (element) => {
+    const [title, items] = KEYS[element.dataset.key];
+    return { title: `Key · ${title}`, body: `<ul class="key-list">${items.map(([icon, label]) => `<li>${icon}<span>${label}</span></li>`).join("")}</ul>` };
+  },
   session: () => ({ title: "Session review", body: `<p>On 15 October 2026, from 20:00 to 23:51, one Claude Code session running Fable 5.1 turned the 886-page construction bid set for Hayward Fire Station #6 and its Fire Training Center into five things: 117 knowledge docs, a viewer for every sheet, a PDF for a reprographics team, a new campus map, and a PS1-style 3D snow globe of the campus.</p><p>Fable planned and checked the work and handed most of it to 17 cheaper subagents (9 Haiku, 3 Sonnet, 5 Opus). It paused 75 minutes for the usage window to reset rather than pay for extra usage. Then it took a second ask: put the globe on the web, and redraw the map's floor plans for instructors. Total cost at API prices: $72.57.</p>` }),
   root: () => ({ title: "Session", body: facts([["Project", "hftc building plans"], ["Root model", "Fable 5.1"], ["Started", "2026-10-15 20:00 PDT"], ["Ended", "23:51 PDT"], ["Agents", `${agents.length}: 9 Haiku, 3 Sonnet, 5 Opus`], ["User messages", "3, plus 1 question answered"], ["Total cost", "$72.57 at API prices"]]) + `<p>Data comes from the hub's audit index and the session's own transcripts.</p>` }),
   clock: () => ({ title: "Session time", body: `<p>Time since the user's first message. It reads <b>T+${clockText(currentT)}</b>, which was ${wallClock(currentT)} PDT.</p>` }),
