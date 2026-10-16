@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="dark">
-<title>Mockup: session display, Fable 5.1 on hftc building plans</title>
+<title>Session review: Fable 5.1 on the HFTC building plans</title>
 <!--
   Mockup (research/ui-design/3-evangelion-fui/study.md). The psychograph
   mockup grown into a full session display: one screen whose panels all
@@ -86,12 +86,12 @@
 </head>
 <body>
 <section class="intro">
-  <h1>A session replayed: Fable 5.1 on the HFTC building plans</h1>
+  <h1>Session review: Fable 5.1 on the HFTC building plans</h1>
   <p>On 15 October 2026, from 20:00 to 23:51, one Claude Code session running Fable 5.1 turned the 886-page construction bid set for Hayward Fire Station #6 and its Fire Training Center into five things: 117 knowledge docs, a viewer for every sheet, a PDF for a reprographics team, a new campus map, and a PS1-style 3D snow globe of the campus. Fable planned and checked the work and handed most of it to 17 cheaper subagents (9 Haiku, 3 Sonnet, 5 Opus). It paused 75 minutes for the usage window to reset rather than pay for extra usage. Then it took a second ask: put the globe on the web, and redraw the map's floor plans for instructors. Total cost at API prices: $72.57.</p>
   <p class="hint">Press Replay to watch it, or tap any part of the display for what it means.</p>
 </section>
 <svg class="display" id="display" viewBox="0 0 400 960" role="img"
-     aria-label="Session display: activity trace, crew by model, agent lanes, usage, deliverables and event log, replaying one session"></svg>
+     aria-label="Session review: activity trace, crew by model, agent lanes, usage, deliverables and event log, replaying one session"></svg>
 
 <div class="controls">
   <button id="play">Replay</button>
@@ -371,8 +371,8 @@ add(pattern, "rect", { width: 3, height: 5, fill: "var(--buggy)" });
 
 // Header
 frame(4, 4, 168, 26);
-add(display, "text", { x: 88, y: 22, "text-anchor": "middle", "font-size": 13, fill: "var(--accent)" }, "SESSION DISPLAY");
-hit(4, 4, 168, 26, "session", { "aria-label": "About this display" });
+add(display, "text", { x: 88, y: 22, "text-anchor": "middle", "font-size": 13, fill: "var(--accent)" }, "SESSION REVIEW");
+hit(4, 4, 168, 26, "session", { "aria-label": "What this session did" });
 const phaseText = add(display, "text", { x: 88, y: 44, "text-anchor": "middle", "font-size": 9, fill: "var(--accent)" }, "");
 frame(232, 4, 164, 40);
 add(display, "text", { x: 239, y: 17, "font-size": 7.5, fill: "var(--accent)" }, `ROOT : FABLE 5.1 · ${agents.length} AGENTS`);
@@ -751,7 +751,7 @@ const facts = (rows) => `<dl>${rows.map(([name, value]) => `<dt>${name}</dt><dd>
 const at = (minute) => `T+${clockText(minute)} (${wallClock(minute)})`;
 const errorList = (agent) => list(agent.errors.map(([minute, tool, message]) => `<span class="mono">${at(minute)} · ${tool}</span><br>${escapeHtml(message)}`));
 const TIPS = {
-  session: () => ({ title: "Session display", body: `<p>One screen replaying one Claude Code session: Fable 5.1 working on the hftc building plans, 3 h 50 min from the user's first message to the last push. Every panel follows the same clock.</p><p><b>Replay</b> plays it in under a minute; the slider scrubs to any moment. The time axes skip the two idle stretches, marked with <b>//</b>.</p>` }),
+  session: () => ({ title: "Session review", body: `<p>On 15 October 2026, from 20:00 to 23:51, one Claude Code session running Fable 5.1 turned the 886-page construction bid set for Hayward Fire Station #6 and its Fire Training Center into five things: 117 knowledge docs, a viewer for every sheet, a PDF for a reprographics team, a new campus map, and a PS1-style 3D snow globe of the campus.</p><p>Fable planned and checked the work and handed most of it to 17 cheaper subagents (9 Haiku, 3 Sonnet, 5 Opus). It paused 75 minutes for the usage window to reset rather than pay for extra usage. Then it took a second ask: put the globe on the web, and redraw the map's floor plans for instructors. Total cost at API prices: $72.57.</p>` }),
   root: () => ({ title: "Session", body: facts([["Project", "hftc building plans"], ["Root model", "Fable 5.1"], ["Started", "2026-10-15 20:00 PDT"], ["Ended", "23:51 PDT"], ["Agents", `${agents.length}: 9 Haiku, 3 Sonnet, 5 Opus`], ["User messages", "3, plus 1 question answered"], ["Total cost", "$72.57 at API prices"]]) + `<p>Data comes from the hub's audit index and the session's own transcripts.</p>` }),
   clock: () => ({ title: "Session time", body: `<p>Time since the user's first message. It reads <b>T+${clockText(currentT)}</b>, which was ${wallClock(currentT)} PDT.</p>` }),
   phase: (element) => {
